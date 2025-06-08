@@ -1,3 +1,5 @@
+
+// ------------------------ Formulaire
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.querySelector('.formulaire form');
   
@@ -68,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
-
+// ------------------------ Animation initial
 document.addEventListener('DOMContentLoaded', () => {
     const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
     
@@ -167,7 +169,7 @@ window.addEventListener('scroll', () => { //déclenche une fonction lorsqu'on sc
     }
 })
 
-// Animaton d'apparition au scroll des sections
+// -------------------------------------- Animaton d'apparition au scroll des sections
 const sections = document.querySelectorAll('.presentation_section, .competence_section, .projets_section, .cv_section, .contact_section');
 window.addEventListener('scroll', () => {
     const triggerBottom = window.innerHeight * 0.8; // Déclenchement quand 80% de l'élément est visible
@@ -184,86 +186,23 @@ window.addEventListener('scroll', () => {
 // Déclenche une première vérification au chargement
 window.dispatchEvent(new Event('scroll'));
 
-//header en responsive
-const nav_responsive = document.querySelector(".reponsive_nav_header > svg");
-const ecran_sombre = document.querySelector(".responsive_ecran_sombre");
-const ecran_sombre_open = document.querySelector(".responsive_ecran_sombre_open");
-nav_responsive.addEventListener("click", function(e) {
-    document.querySelector(".reponsive_nav_header_menu").classList.toggle("reponsive_nav_header_menu_open");
-    ecran_sombre.classList.toggle("responsive_ecran_sombre_open");
+// -------------------------------------- header en responsive
+const navButton = document.querySelector(".responsive_button_header");
+const darkScreen = document.querySelector(".responsive_ecran_sombre");
+const menu = document.querySelector(".reponsive_nav_header_menu");
+
+navButton.addEventListener("click", function(e) {
+    // Basculer l'état du menu
+    menu.classList.toggle("reponsive_nav_header_menu_open");
+    darkScreen.classList.toggle("responsive_ecran_sombre_open");
+    
+    // Transformer le bouton en croix
+    navButton.classList.toggle("menu-open");
 });
 
-ecran_sombre_open.addEventListener("click", function(k) {
-    document.querySelector(".reponsive_nav_header_menu").classList.remove("reponsive_nav_header_menu_open");
-    ecran_sombre.classList.remove("responsive_ecran_sombre_open");
-})
-
-// -------------------------- Formulaire de message
-// document.addEventListener('DOMContentLoaded', function() {
-//   console.log("DOM chargé - début du script"); // Debug 1
-  
-//   const form = document.querySelector('.formulaire form');
-  
-//   if (!form) {
-//     console.error("ERREUR: Formulaire non trouvé");
-//     return;
-//   }
-
-//   console.log("Formulaire trouvé:", form); // Debug 2
-
-//   form.addEventListener('submit', async function(e) {
-//     e.preventDefault();
-//     console.log("Submit déclenché"); // Debug 3
-
-//     // Récupération des valeurs
-//     const formData = {
-//       nom: document.getElementById('nom').value.trim(),
-//       email: document.getElementById('email').value.trim(),
-//       message: document.getElementById('message').value.trim()
-//     };
-
-//     console.log("Données du formulaire:", formData); // Debug 4
-
-//     // Validation basique
-//     if (!formData.nom || !formData.email || !formData.message) {
-//       alert("Veuillez remplir tous les champs");
-//       return;
-//     }
-
-//     // Webhook Discord - REMPLACEZ PAR VOTRE URL
-//     const webhookURL = 'https://discord.com/api/webhooks/1379500495101624351/TpCc6knaS_fRKENhK62wKQaW7e7cP6ujhhPdH8nJW0YDt7CMIllqT4UooVKX8e0u2G9V';
-
-//     // Payload Discord
-//     const payload = {
-//       content: `**Nouveau message**\n**Nom:** ${formData.nom}\n**Email:** ${formData.email}\n**Message:** ${formData.message}`,
-//       username: "Site Web Form",
-//       avatar_url: ""
-//     };
-
-//     try {
-//       console.log("Tentative d'envoi..."); // Debug 5
-      
-//       const response = await fetch(webhookURL, {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(payload)
-//       });
-
-//       console.log("Réponse reçue:", response); // Debug 6
-
-//       if (!response.ok) {
-//         throw new Error(`Erreur HTTP: ${response.status}`);
-//       }
-
-//       alert("Message envoyé avec succès à Discord!");
-//       form.reset();
-//     } catch (error) {
-//       console.error("Erreur complète:", error); // Debug 7
-//       alert(`Erreur d'envoi: ${error.message}`);
-//     }
-//   });
-// });
-
-// console.log("URL du webhook:", webhookURL);
+darkScreen.addEventListener("click", function() {
+    // Fermer le menu et réinitialiser le bouton
+    menu.classList.remove("reponsive_nav_header_menu_open");
+    darkScreen.classList.remove("responsive_ecran_sombre_open");
+    navButton.classList.remove("menu-open");
+});
