@@ -1,3 +1,74 @@
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('.formulaire form');
+  
+  if (!form) return;
+
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Désactivation du bouton pendant l'envoi
+    const submitBtn = e.target.querySelector('[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Envoi en cours...';
+
+    try {
+      // 1. Récupération des données
+      const formData = {
+        nom: this.nom.value.trim(),
+        email: this.email.value.trim(),
+        message: this.message.value.trim()
+      };
+
+      // 2. Validation
+      if (!formData.nom || !formData.email || !formData.message) {
+        throw new Error("Veuillez remplir tous les champs");
+      }
+
+      // 3. Configuration du webhook (À PERSONNALISER)
+      const webhookPayload = {
+        username: "Nouveau message depuis le portfolio !!!!!!!!!!!!!!!!!!!!!!!!!!!",  // Nom du bot
+        avatar_url: "https://www.istockphoto.com/fr/vectoriel/point-dexclamation-signer-en-triangle-rouge-ic%C3%B4ne-de-vecteur-gm894875516-247346339",  // URL de l'avatar
+        embeds: [{
+          title: "📩 Nouveau Message",
+          color: 0x5865F2,  // Couleur bleue Discord
+          fields: [
+            { name: "**Nom**", value: formData.nom, inline: true },
+            { name: "**Email**", value: formData.email, inline: true },
+            { name: "**Message**", value: formData.message }
+          ],
+          footer: { 
+            text: "Formulaire de contact • " + new Date().toLocaleDateString(),
+            icon_url: "https://example.com/icon.png"
+          },
+          thumbnail: { 
+            url: "https://example.com/thumbnail.png" 
+          }
+        }]
+      };
+
+      // 4. Envoi à Discord
+      const response = await fetch('https://discord.com/api/webhooks/1379500495101624351/TpCc6knaS_fRKENhK62wKQaW7e7cP6ujhhPdH8nJW0YDt7CMIllqT4UooVKX8e0u2G9V', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(webhookPayload)
+      });
+
+      if (!response.ok) throw new Error("Erreur lors de l'envoi à Discord");
+
+      // 5. Feedback utilisateur
+      alert("Message envoyé avec succès !");
+      this.reset();
+
+    } catch (error) {
+      console.error("Erreur:", error);
+      alert(error.message);
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Envoyer';
+    }
+  });
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
     
@@ -40,9 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
             reset() {
                 this.x = Math.random() * canvas.width; // Position X aléatoire
                 this.y = canvas.height + Math.random() * 100; // Part juste en bas de l'écran
-                this.size = Math.random() * 5 + 1; // Taille entre 1 et 6 pixels
-                this.speedY = Math.random() * 3 + 1; // Vitesse verticale aléatoire
-                this.color = `hsl(${Math.random() * 20 + 350}, 100%, ${Math.random() * 30 + 50}%)`; // Nuances de rouge
+                this.size = Math.random() * 3 + 1; // Taille entre 1 et 6 pixels
+                this.speedY = Math.random() + 0.1; // Vitesse verticale aléatoire
+                this.color = `#${Math.floor(Math.random() * 0x3548e0 + 0x05041D).toString(16).padStart(6, '0')}`; // Nuances de rouge
                 this.alpha = Math.random() * 0.5 + 0.1; // Transparence aléatoire
             }
             
@@ -64,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Création des particules
         const particles = [];
-        const particleCount = 150;
+        const particleCount = 50;
         
         for (let i = 0; i < particleCount; i++) {
             particles.push(new Particle()); // Ajoute 150 particules
@@ -96,26 +167,22 @@ window.addEventListener('scroll', () => { //déclenche une fonction lorsqu'on sc
     }
 })
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Sélectionnez toutes vos sections
-    const sections = document.querySelectorAll('.presentation_section, .competence_section, .projets_section, .cv_section, .contact_section');
-    
-    // Configuration de l'Observer
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('section_visible');
-            }
-        });
-    }, {
-        threshold: 0.3
-    });
+// Animaton d'apparition au scroll des sections
+const sections = document.querySelectorAll('.presentation_section, .competence_section, .projets_section, .cv_section, .contact_section');
+window.addEventListener('scroll', () => {
+    const triggerBottom = window.innerHeight * 0.8; // Déclenchement quand 80% de l'élément est visible
 
-    // Observez chaque section
     sections.forEach(section => {
-        observer.observe(section);
+        const sectionTop = section.getBoundingClientRect().top;
+
+        if (sectionTop < triggerBottom) {
+            section.classList.add('section_visible');
+        }
     });
 });
+
+// Déclenche une première vérification au chargement
+window.dispatchEvent(new Event('scroll'));
 
 //header en responsive
 const nav_responsive = document.querySelector(".reponsive_nav_header > svg");
@@ -130,6 +197,7 @@ ecran_sombre_open.addEventListener("click", function(k) {
     document.querySelector(".reponsive_nav_header_menu").classList.remove("reponsive_nav_header_menu_open");
     ecran_sombre.classList.remove("responsive_ecran_sombre_open");
 })
+
 // -------------------------- Formulaire de message
 // document.addEventListener('DOMContentLoaded', function() {
 //   console.log("DOM chargé - début du script"); // Debug 1

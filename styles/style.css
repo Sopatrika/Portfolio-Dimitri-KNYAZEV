@@ -9,21 +9,21 @@ body {
     color: #EFEEFF;
     width: 100%;
     overflow: hidden;
-    font-size: 20px;
+    font-size: 15px;
 }
 
 /* Pour Firefox */
 /* Pour les navigateurs WebKit (Chrome, Safari, Edge) */
-body::-webkit-scrollbar {
+body::-webkit-scrollbar, .projet_desc::-webkit-scrollbar {
     width: 15px; /* Largeur de la scrollbar */
 }
 
-body::-webkit-scrollbar-track {
+body::-webkit-scrollbar-track, .projet_desc::-webkit-scrollbar-track {
     background: #060219; /* Couleur de la piste */
     opacity: 0.5;
 }
 
-body::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb, .projet_desc::-webkit-scrollbar-thumb {
     background: #3a49ea; /* Couleur du curseur */
 }
 
@@ -124,9 +124,9 @@ header {
     filter: blur(4px);
 }
 
-.header_nav>a:nth-child(3):after {
-    left: -60%;
-    width: 240%;
+.header_nav>a:nth-child(4):after {
+    left: -70%;
+    width: 250%;
 }
 
 .header_nav>a:hover::after {
@@ -223,9 +223,14 @@ h1 {
 
 .presentation_section, .competence_section, .projets_section, .cv_section, .contact_section {
     padding: 150px 15% 150px 15%;
+    margin: 0% 0%;
     transition: 0.4s ease;
     opacity: 0;
     transform: translateX(-50px);
+}
+
+.intro_section {
+    width: 80%;
 }
 
 .section_visible {
@@ -238,144 +243,91 @@ h1 {
     display: flex;
     gap: 200px;
     background: #EFEEFF10;
-    flex-wrap: wrap;
 }
 
-.presentation_section_left>p {
-    width: 446px;
-}
-
-.centre_interet {
+.section_interet_parcours_more {
     font-size: 15px;
     margin-top: 30px;
 }
 
-.section_centre_interet {
+.section_centre_interet_parcours_more {
     display: flex;
     gap: 30px;
     align-items: center;
     margin-top: 10px;
 }
 
-.presentation_section_right {
-    position: relative;
-    width: 40%;
-    min-height: 400px; /* Hauteur minimale pour éviter le chevauchement */
-    margin-bottom: 40px;
-    margin-top: 100px;
-}
-
-.parcours_arbre {
-    position: relative;
-    height: 100%;
-}
-
-.parcours_barre {
-    position: absolute;
-    background-color: #EFEEFF;
-    padding: 3px;
-    border-radius: 10px;
-}
-
-.parcours_barre:first-child {
-    left: 30px;
-    top: 240px;
-    width: 500px;
-    transform: rotate(90deg);
-}
-
-.parcours_barre:nth-child(2), .parcours_barre:nth-child(3) {
-    width: 230px;
-}
-
-.parcours_barre:nth-child(2) {
-    top: 60px;
-    left: 50px;
-}
-
-.parcours_barre:nth-child(3) {
-    top: 230px;
-    left: 280px;
-}
-
-.parcours_carree {
-    border-radius: none;
-    transform: rotate(45deg);
-    position: absolute;
-    background-color: #EFEEFF;
-    padding: 13px;
-    left: 270px;
-    top: -25px;
-}
-
-.parcours_elements {
-    position: absolute;
-    width: 220px;
-    font-size: 15px;
-    display: flex;
-    flex-direction: column;
-}
-
-.IUT {
-    top: 5px;
-    left: 50px;
-    text-align: right;
-}
-
-.Lycee {
-    left: 300px;
-    top: 160px;
-    text-align: left;
-}
-
-.parcours_elements b {
-    margin-top: 5px;
-    margin-bottom: 30px;
-}
-
 /************** section compétence *****************/
 
 .competence_section {
     background: #EFEEFF17;
+    box-sizing: border-box;
 }
 
 .competence_section_grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Deux colonnes flexibles */
-    width: 100%;
-    gap: 10px 100px;
-    align-items: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centre horizontalement */
+    justify-content: center; /* Centre verticalement */
+    text-align: center;
+    gap: 10px;
 }
 
-.desc_competence>b {
-    display: flex;
-    justify-content: right;
-    font-size: 20px;
-    margin-right: 20px;
+@property --gradien-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
 }
  
 .bloc_competence {
-    border: solid 3px #EFEEFF;
+   border: solid 1px #EFEEFF;
     background: #EFEEFF50;
     border-radius: 20px;
     display: flex;
+    align-items: center;    
+    justify-content: center; 
+    text-align: center;
     gap: 20px;
-    align-items: self-start;
-    padding: 40px 20px;
-    align-items: flex-start;
+    padding: 10px;
     flex-wrap: wrap;
     color: #dcdeff;
+    width: 50%;            
+    min-height: 50px; 
+    position: relative; 
+    z-index: 1; 
+}
+
+.bloc_competence::before ,.bloc_competence::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    opacity: 0.5;
+    border-radius: inherit;
+    animation: competence_rotation 3s linear infinite;
+    background: conic-gradient(
+        from var(--gradien-angle), #5e64d2, #111068, #180048
+    );
+    filter: blur(1px); /* Optionnel : adoucit les bords */
+}
+
+@keyframes competence_rotation {
+    0% {
+        --gradien-angle: 0deg;
+    }
+    100% {
+        --gradien-angle: 360deg;
+    }
 }
 
 .bloc_competence:first-child {
     display: flex;
-    gap: 30px;
-    align-items: center;
+    gap: 10px;
 }
 
 .section_bloc_competence {
-    flex-direction: column;
-    align-items: center;
+    align-items: center; /* Aligne l'icône et le texte sur la même ligne */
+    gap: 10px;
 }
 
 .section_bloc_competence>.element_competences {
@@ -383,27 +335,17 @@ h1 {
 }
 
 .element_competences {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex: 1;
+   display: flex;
+   align-items: center;
+   gap: 10px;
 }
 
 .element_competences>div {
-    width: auto;
+    flex-wrap: nowrap;
 }
 
 .icones_competences {
     width: 35px;
-}
-
-.competence_barre {
-    background: white;
-    border-radius: 3px;
-    padding: 3px;
-    position: absolute;
-    left: 50%;
-    height: 60%;
 }
 
 /************** Réalisations *****************/
@@ -415,7 +357,7 @@ h1 {
 .projets_section_grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(450px, 1fr)); /* Responsive */
-    gap: 10px;
+    gap: 20px 20px;
     width: 100%;
     box-sizing: border-box;
     padding: 10px;
@@ -426,6 +368,7 @@ h1 {
     position: relative;
     overflow: hidden;
     height: 400px;
+    width: 100%;
     max-width: 100%;
     transition: 0.2s ease;
     text-shadow: 0px 0px 5px 1px #05041D;
@@ -442,7 +385,6 @@ h1 {
     }
     to {
         opacity: 1;
-        animation-fill-mode: forwards; /* Garde le dernier état */
     }
 }
 
@@ -465,10 +407,11 @@ h1 {
 .titre_projet {
     position: absolute;
     bottom: 10%;
-    width: 100%;
     transition: 0.2s ease;
     display: flex;
     justify-content: center;
+    left: 10%;
+    right: 10%;
 }
 
 .projet_desc {
@@ -482,12 +425,23 @@ h1 {
     bottom: 0;
     left: 0;
     right: 0;
-    clip-path: inset(85% 0 0 0);
     box-sizing: border-box; /* Inclut le padding dans la largeur/hauteur */
     width: 100%;
-    height: 100%; /* Maintenant contenu par overflow:hidden du parent */
-    transition: 0.2s ease;
+    height: 100%;
     opacity: 0;
+    transition: 0.4s ease;
+    overflow: auto;
+    clip-path: inset(50% 50% 50% 50%);
+}
+
+.projet_desc p {
+    width: 100%;
+}
+
+.bloc_projet:hover {
+    transform: translateY(-10px);
+    transition: 0.4s ease;
+    box-shadow: 6px 6px 5px 3px #0a0a0a50;
 }
 
 .bloc_projet:hover .titre_projet {
@@ -495,8 +449,8 @@ h1 {
 }
 
 .bloc_projet:hover .projet_desc {
-    clip-path: inset(0 0 0 0);
     opacity: 1;
+    clip-path: inset(0 0 1% 0);
 }
 
 .bloc_projet:hover img {
@@ -525,12 +479,14 @@ h1 {
 
 .cv_section_flex {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     flex-wrap: wrap;
 }
 
-.cv_section_flex>p {
-    width: 25%;
+.deux_cv {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
 }
 
 .CV {
@@ -543,6 +499,7 @@ h1 {
     display: inline-block;
     position: relative;
     overflow: hidden;
+    width: 100%;
 }
 
 .image_cv>img {
@@ -565,6 +522,12 @@ h1 {
     justify-content: center;
     align-items: center;
     height: 100%;
+}
+
+.image_cv:hover {
+    transform: translateY(-10px);
+    transition: 0.5s ease;
+    box-shadow: 6px 6px 5px 3px #0a0a0a50;
 }
 
 .image_cv:hover .hover_cv {
@@ -684,24 +647,27 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 
 footer {
-    padding: 100px 300px 100px 300px;
+    padding: 150px 10% 100px 10%;
     background: #05041D;
+    flex-wrap: wrap;
     position: relative;
-    display: flex;
-    justify-content: center;
 }
 
 .bouton_retour {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
     border-radius: 50%; /* Forme ronde */
     box-shadow: 0 0 5px #EFEEFF;
     transition: 0.3s ease;
-    text-decoration: none;    position: absolute;
+    text-decoration: none;
     left: 50%;
     top: 15px;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: 45%;
 }
 
 .bouton_retour:hover {
@@ -717,8 +683,8 @@ footer {
 
 .footer_colonnes {
     display: flex;
-    gap: 50px;
-    flex-wrap: wrap;
+    gap: 20%;
+    justify-content: center;
 }
 
 .footer_colonne>div {
@@ -745,7 +711,6 @@ footer {
     }
     p {
         max-width: 600px;
-        height: 70%;
     }
 
     .header_nav {
@@ -830,8 +795,8 @@ footer {
         padding: 150px 20px 150px 20px;
     }
 
-    .competence_barre {
-        display: none;
+    .projet_desc {
+        font-size: 15px;
     }
 
     .cv_section_flex {
@@ -853,9 +818,28 @@ footer {
     textarea {
         width: 90%;
     }
+
+    footer {
+    padding: 100px 5% 80px 5%;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+  }
+
+  .footer_colonnes {
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer_colonne > div {
+    margin-top: 0;
+  }
 }
 
-/******** Version Mobile *********/
+
+/************************* Version Mobile *************************/
 @media (max-width: 480px) {
 
     header {
@@ -871,7 +855,7 @@ footer {
     }
 
     .icones {
-        width: 20px;
+        width: 30px;
     }
 
     .homepage {
@@ -879,12 +863,12 @@ footer {
     }
 
     .titres {
-    margin-left: 10px;
+    margin-left: 15px;
     vertical-align: auto;
 }
 
 .Titre {
-    font-size: 20px;
+    font-size: 25px;
 }
 
 .sous_titre {
@@ -894,16 +878,19 @@ footer {
 
 .homepage_scrollbar {
     padding: 10px;
-    font-size: 10px;
+    font-size: 15px;
 }
 
     h1 {
         font-size: 20px;
     }
 
+    .intro_section {
+       font-size: 15px;
+    }
+
     .presentation_section, .competence_section, .projets_section, .cv_section, .contact_section {
-        padding: 150px 10px 0px 10px;
-        flex-wrap: wrap;
+        padding: 150px 10px 150px 10px;
     }
 
     .presentation_section {
@@ -915,17 +902,10 @@ footer {
     .presentation_section_right {
         position: relative;
         width: 50px;
-        min-height: 400px; /* Hauteur minimale pour éviter le chevauchement */
-    }
-
-    .competence_section_grid {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
     }
 
     .bloc_competence {
-        width: 100%;
+        width: 200px;
         gap: 5px;
     }
 
@@ -933,32 +913,27 @@ footer {
         font-size: 10px;
     }
 
-    .competence_barre {
-        display: none;
+    .element_competences svg {
+        width: 30px;
     }
 
-    footer {
-    padding: 10px;
-    background: none;
-    position: relative;
-    display: flex;
-    justify-content: center;
-}
+    .projets_section_grid {
+        grid-template-columns: 300px;
+    }
 
-.footer_colonnes {
-    display: flex;
-    font-size: 10px;
-}
+    .bloc_projet {
+        height: 200px;
+        width: 80%;
+    }
 
-.footer_colonne>div {
-    margin-top: 5px;
+    .image_cv {
+        width: 50%;
+    }
 }
-}
-
 
 /******************************************************************************************/
 
-/* body::before {
+body::before {
     content: "Desktop";
     position: fixed;
     top: 0;
@@ -981,4 +956,4 @@ footer {
         content: "Mobile";
         background: green;
     }
-} */
+}
