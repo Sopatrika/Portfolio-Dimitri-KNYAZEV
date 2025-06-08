@@ -273,11 +273,6 @@ h1 {
     gap: 10px;
 }
 
-@property --gradien-angle {
-    syntax: '<angle>';
-    initial-value: 0deg;
-    inherits: false;
-}
  
 .bloc_competence {
    border: solid 1px #EFEEFF;
@@ -295,29 +290,6 @@ h1 {
     min-height: 50px; 
     position: relative; 
     z-index: 1; 
-}
-
-.bloc_competence::before ,.bloc_competence::after {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    z-index: -1;
-    opacity: 0.5;
-    border-radius: inherit;
-    animation: competence_rotation 3s linear infinite;
-    background: conic-gradient(
-        from var(--gradien-angle), #5e64d2, #111068, #180048
-    );
-    filter: blur(1px); /* Optionnel : adoucit les bords */
-}
-
-@keyframes competence_rotation {
-    0% {
-        --gradien-angle: 0deg;
-    }
-    100% {
-        --gradien-angle: 360deg;
-    }
 }
 
 .bloc_competence:first-child {
