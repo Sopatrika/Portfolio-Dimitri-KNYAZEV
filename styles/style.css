@@ -166,12 +166,12 @@ header {
 }
 
 .Titre {
-    font-size: 80px;
+    font-size: 50px;
 }
 
 .sous_titre {
     margin-bottom: 3em;
-    font-size: 1.5em;
+    font-size: 30px;
 }
 
 .homepage_scrollbar {
@@ -777,20 +777,6 @@ footer {
     }
 
 /* reste de la page en responsive */
-
-    .titres {
-    margin-left: 25px;
-    vertical-align: auto;
-}
-
-.Titre {
-    font-size: 25px;
-}
-
-.sous_titre {
-    margin-bottom: 50px;
-    font-size: 20px;
-}
 
     .presentation_section {
         display: flex;
