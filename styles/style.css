@@ -160,18 +160,18 @@ header {
 }
 
 .titres {
-    margin-left: 10%;
+    margin-left: 8%;
     display: block; /* ou inline-block */
     position: relative; /* nécessaire pour les transformations */
 }
 
 .Titre {
-    font-size: 50px;
+    font-size: 60px;
 }
 
 .sous_titre {
     margin-bottom: 3em;
-    font-size: 30px;
+    font-size: 25px;
 }
 
 .homepage_scrollbar {
@@ -215,6 +215,14 @@ header {
 
 .homepage_scrollbar:hover::before {
     width: 100%;
+}
+
+.homepage_scrollbar svg  {
+    transition: 0.2s ease;
+}
+
+.homepage_scrollbar:hover svg {
+    transform: scale(1.2);
 }
 
 h1 {
@@ -276,7 +284,7 @@ h1 {
  
 .bloc_competence {
    border: solid 1px #EFEEFF;
-    background: #EFEEFF50;
+    background: #EFEEFF20;
     border-radius: 20px;
     display: flex;
     align-items: center;    
@@ -334,7 +342,7 @@ h1 {
     background: #EFEEFF50;
     position: relative;
     overflow: hidden;
-    height: 400px;
+    height: 350px;
     width: 100%;
     max-width: 100%;
     transition: 0.2s ease;
@@ -385,7 +393,7 @@ h1 {
     padding: 15px;
     position: absolute;
     display: flex;
-    font-size: 20px;
+    font-size: 15px;
     flex-direction: column;
     justify-content: space-between;
     background-color: #06021920;
@@ -409,6 +417,7 @@ h1 {
     transform: translateY(-10px);
     transition: 0.4s ease;
     box-shadow: 6px 6px 5px 3px #0a0a0a50;
+    background: none;
 }
 
 .bloc_projet:hover .titre_projet {
@@ -680,6 +689,11 @@ footer {
         top: 0;
     }
 
+    .header-visible {
+        background: none;
+        border: none;
+    }
+
     .intro_titre {
         font-size: 20px;
     }
@@ -692,6 +706,8 @@ footer {
         display: block;
         position: relative;
         margin: 30px;
+        position: fixed;
+        right: 30px;
     }
 
     .responsive_button_header {
@@ -705,17 +721,17 @@ footer {
         position: absolute;
         background-color: #EFEEFF;
         border-radius: 50px;
-        width: 50px;
+        width: 40px;
         height: 4px;
         transition: 0.2s ease;
     }
 
     .responsive_button_header_barre:first-child {
-        top: -15px;
+        top: -10px;
     }
 
     .responsive_button_header_barre:last-child{
-        top: 15px;
+        top: 10px;
     }
 
     .responsive_ecran_sombre {
@@ -742,7 +758,8 @@ footer {
 
     .reponsive_nav_header_menu {
         position: absolute;
-        top: 30px;
+        top: 50px;
+        left: -110px;
         display: flex;
         flex-direction: column;
         gap: 30px;
@@ -767,13 +784,13 @@ footer {
     }
 
     .responsive_button_header.menu-open .responsive_button_header_barre:nth-child(1) {
-        transform: rotate(45deg) translate(15px, 5px);
+        transform: rotate(45deg) translateY(14px);
     }
     .responsive_button_header.menu-open .responsive_button_header_barre:nth-child(2) {
         opacity: 0;
     }
     .responsive_button_header.menu-open .responsive_button_header_barre:nth-child(3) {
-        transform: rotate(-45deg) translate(15px, -5px);
+        transform: rotate(-45deg) translateY(-14px);
     }
 
 /* reste de la page en responsive */

@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
       };
 
       // 4. Envoi à Discord
-      const response = await fetch('https://discord.com/api/webhooks/1379500495101624351/TpCc6knaS_fRKENhK62wKQaW7e7cP6ujhhPdH8nJW0YDt7CMIllqT4UooVKX8e0u2G9V', {
+      const response = await fetch('https://discord.com/api/webhooks/1381736257507299430/jmxVnbOahyGjZ10zM2f8f8HAniq5CdDPmMrWfXwz4H4cccm3m18jZqZTUGQeFXigVF4l', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(webhookPayload)
