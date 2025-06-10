@@ -6,7 +6,7 @@ body {
     font-family: 'Sora';
     margin: 0px;
     background-image: radial-gradient(circle,  #180048 0%,  #05022B 81%,  #060219 100%);
-    color: #EFEEFF;
+    color: #ebe9ff;
     width: 100%;
     overflow: hidden;
     font-size: 15px;
@@ -33,7 +33,7 @@ body::-webkit-scrollbar-thumb:hover {
 
 a {
     text-decoration: none;
-    color: #fff;
+    color: #ebe9ff;
 }
 
 /* Animation d'intro */
@@ -50,7 +50,7 @@ a {
     justify-content: center;
     align-items: center;
     z-index: 5;
-    color: #EFEEFF;
+    color: #ebe9ff;
 }
         
 .intro_titre {
@@ -94,7 +94,7 @@ header {
 
 .header-visible {
     background-color: #060219;
-    border-bottom: solid 1px #EFEEFF;
+    border-bottom: solid 1px #ebe9ff;
 }
 
 .header_nav {
@@ -161,17 +161,40 @@ header {
 
 .titres {
     margin-left: 8%;
-    display: block; /* ou inline-block */
-    position: relative; /* nécessaire pour les transformations */
+    display: block;
+    margin-bottom: 50px;
 }
 
 .Titre {
     font-size: 60px;
+    position: relative;
+}
+
+.Titre::before {
+    content: "DIMITRI KNYAZEV";
+    position: absolute;
+    animation: titres_animation 3s ease infinite;
+    z-index: -1;
+    opacity: 0.3;
+    filter: blur(2px);
 }
 
 .sous_titre {
-    margin-bottom: 3em;
     font-size: 25px;
+}
+
+@keyframes titres_animation {
+    0%,100% {
+        filter: blur(2px);
+        transform: none;
+    }
+    25% {
+        transform: translate(-2px, -10px);
+    }
+
+    50% {
+        transform: translate(2px, -10px);
+    }
 }
 
 .homepage_scrollbar {
@@ -185,13 +208,13 @@ header {
     align-items: center;
     border: none;
     border-radius: 20px;
-    font-size: 30px;
+    font-size: 20px;
     margin-left: 10%;
     position: relative;
     z-index: 0;
     width: max-content;
     overflow: hidden;
-    box-shadow: 0px 0px 3px 0px #EFEEFF;
+    box-shadow: 0px 0px 0px 3px #ebe9ff;
     transition: 0.4s;
 }
 
@@ -207,10 +230,6 @@ header {
     z-index: -1;
     border-radius: 20px;
 
-}
-
-.homepage_scrollbar:hover {
-    box-shadow: 0px 0px 0px 3px #EFEEFF;
 }
 
 .homepage_scrollbar:hover::before {
@@ -250,7 +269,7 @@ h1 {
     margin-top: 10vw;
     display: flex;
     gap: 200px;
-    background: #EFEEFF10;
+    background: #d7d4ff10;
 }
 
 .section_interet_parcours_more {
@@ -268,7 +287,7 @@ h1 {
 /************** section compétence *****************/
 
 .competence_section {
-    background: #EFEEFF17;
+    background: #ebe9ff17;
     box-sizing: border-box;
 }
 
@@ -283,8 +302,8 @@ h1 {
 
  
 .bloc_competence {
-   border: solid 1px #EFEEFF;
-    background: #EFEEFF20;
+   border: solid 1px #ebe9ff;
+    background: #d7d4ff20;
     border-radius: 20px;
     display: flex;
     align-items: center;    
@@ -293,11 +312,12 @@ h1 {
     gap: 20px;
     padding: 10px;
     flex-wrap: wrap;
-    color: #dcdeff;
+    color: #ebe9ff;
     width: 50%;            
     min-height: 50px; 
     position: relative; 
-    z-index: 1; 
+    z-index: 1;
+    overflow: hidden;
 }
 
 .section_bloc_competence {
@@ -321,6 +341,11 @@ h1 {
 
 .icones_competences {
     width: 35px;
+    transition: 0.2s ease;
+}
+
+.icones_competences:hover {
+    transform: scale(1.2);
 }
 
 /************** Réalisations *****************/
@@ -339,7 +364,7 @@ h1 {
 }
 
 .bloc_projet {
-    background: #EFEEFF50;
+    background: #ebe9ff50;
     position: relative;
     overflow: hidden;
     height: 350px;
@@ -450,7 +475,7 @@ h1 {
 /*************************** CV ******************************/
 
 .cv_section {
-    background: #EFEEFF17;
+    background: #ebe9ff17;
 }
 
 .cv_section_flex {
@@ -490,7 +515,7 @@ h1 {
     left: 0;
     right: 0;
     background-color: rgba(24, 23, 39, 0.8);
-    color: white;
+    color: #d7d4ff;
     padding: 10px;
     opacity: 0;
     transition: 0.2s ease;
@@ -566,27 +591,27 @@ h1 {
     position: relative;
     background: none;
     border: none;
-    color: white;
+    color: #d7d4ff;
     position: relative;
     width: 500px;
-    border-bottom: solid 3px #EFEEFF;
+    border-bottom: solid 3px #ebe9ff;
     transition: 0.2s ease;
     font-size: 20px;
 }
 
 .input_formulaire:focus, textarea:focus {
     outline: none;
-    background-color: #EFEEFF10;
+    background-color: #ebe9ff10;
 }
 
 textarea {
     background: none;
-    border: solid 3px #EFEEFF;
+    border: solid 3px #ebe9ff;
     width: 100%;
     padding: 5px;
     min-height: 200px;
     resize: vertical;
-    color: #EFEEFF;
+    color: #ebe9ff;
     transition: 0.2s ease;
     font-size: 20px;
     resize: none;
@@ -597,7 +622,7 @@ textarea::-webkit-scrollbar {
 }
 
 textarea::-webkit-scrollbar-track {
-    background: #EFEEFF; /* Couleur de la piste */
+    background: #d7d4ff; /* Couleur de la piste */
 }
 
 textarea::-webkit-scrollbar-thumb {
@@ -611,14 +636,14 @@ textarea::-webkit-scrollbar-thumb:hover {
 
 .formulaire_submit {
     background: none;
-    border: solid 3px #EFEEFF;
+    border: solid 3px #ebe9ff;
     padding: 10px 30px 10px 30px;
-    color: white;
+    color: #ebe9ff;
     transition: 0.2s ease;
 }
 
 .formulaire_submit:hover {
-    background: #EFEEFF;
+    background: #ebe9ff;
     color: #060219;
 }
 
@@ -635,7 +660,7 @@ footer {
     align-items: center;
     padding: 10px;
     border-radius: 50%; /* Forme ronde */
-    box-shadow: 0 0 5px #EFEEFF;
+    box-shadow: 0 0 5px #ebe9ff;
     transition: 0.3s ease;
     text-decoration: none;
     left: 50%;
@@ -648,7 +673,7 @@ footer {
 
 .bouton_retour:hover {
     transform: scale(1.1); /* Légère augmentation de taille */
-    background-color: #EFEEFF30; /* Couleur au survol */
+    background-color: #d7d4ff30; /* Couleur au survol */
 }
 
 .bouton_retour img {
@@ -673,7 +698,7 @@ footer {
 }
 
 .footer_colonne>div>a:hover {
-    color: hsl(244, 100%, 97%)
+    color: #ebe9ff;
 }
 
 /**********************************************************************************/
@@ -719,7 +744,7 @@ footer {
 
     .responsive_button_header_barre {
         position: absolute;
-        background-color: #EFEEFF;
+        background-color: #ebe9ff;
         border-radius: 50px;
         width: 40px;
         height: 4px;
@@ -767,7 +792,7 @@ footer {
         padding: 10px;
         clip-path: inset(0 0 100% 0);
         transition: 0.2s ease;
-        border: solid 1px #EFEEFF;
+        border: solid 1px #ebe9ff;
         border-radius: 10px;
     }
 
@@ -806,7 +831,15 @@ footer {
 
     .projet_desc {
         font-size: 15px;
+        display: none;
+        transition: 0.2s ease;
     }
+
+    .projet_desc.visible {
+        display: block;
+        opacity: 1;
+        clip-path: inset(0 0 1% 0);
+}
 
     .cv_section_flex {
         display: flex;
@@ -864,7 +897,7 @@ footer {
     }
 
     .homepage {
-        margin: 200px 10px 200px 10px;
+        margin: 100px 10px 200px 10px;
     }
 
     .titres {
@@ -873,7 +906,7 @@ footer {
 }
 
 .Titre {
-    font-size: 25px;
+    font-size: 30px;
 }
 
 .sous_titre {
@@ -931,34 +964,11 @@ footer {
         width: 80%;
     }
 
+    .cv_section_flex {
+        display: block;
+    }
+
     .image_cv {
         width: 50%;
     }
 }
-
-/******************************************************************************************/
-/* 
-body::before {
-    content: "Desktop";
-    position: fixed;
-    top: 0;
-    left: 0;
-    background: red;
-    color: white;
-    padding: 5px;
-    z-index: 9999;
-}
-
-@media (max-width: 768px) {
-    body::before {
-        content: "Tablette";
-        background: blue;
-    }
-}
-
-@media (max-width: 480px) {
-    body::before {
-        content: "Mobile";
-        background: green;
-    }
-} */

@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('.intro-overlay').style.display = 'none';
             document.querySelector('body').style.overflow = 'auto';
         }
-    }, "-=0.3");
+    }, "-=0.3")
 });
 
 // --------------------------------------- canvas ---------------------------------------------//
@@ -206,3 +206,25 @@ darkScreen.addEventListener("click", function() {
     darkScreen.classList.remove("responsive_ecran_sombre_open");
     navButton.classList.remove("menu-open");
 });
+
+
+// Sélectionne tous les projets
+const projets = document.querySelectorAll('.bloc_projet');
+
+// Vérifie si c'est un mobile/tablette
+function estMobile() {
+  return window.innerWidth <= 1024; // Breakpoint tablette
+}
+
+// Ajoute ou retire la classe 'visible'
+function toggleDescription(projet) {
+  const desc = projet.querySelector('.projet_desc');
+  if (desc) desc.classList.toggle('visible');
+}
+
+// Setup initial
+if (estMobile()) {
+  projets.forEach(projet => {
+    projet.addEventListener('click', () => toggleDescription(projet));
+  });
+}
