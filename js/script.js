@@ -1,75 +1,62 @@
 
 // ------------------------ Formulaire
 document.addEventListener('DOMContentLoaded', function() {
-  const form = document.querySelector('.formulaire form');
-  
-  if (!form) return;
+    const form = document.querySelector('.formulaire form');
+    if (!form) return;
 
-  form.addEventListener('submit', async function(e) {
-    e.preventDefault();
-    
-    // Désactivation du bouton pendant l'envoi
-    const submitBtn = e.target.querySelector('[type="submit"]');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Envoi en cours...';
+    // Création d'un élément pour afficher les erreurs
+    const errorDisplay = document.createElement('div');
+    errorDisplay.className = 'error-message';
+    form.parentNode.insertBefore(errorDisplay, form.nextSibling);
 
-    try {
-      // 1. Récupération des données
-      const formData = {
-        nom: this.nom.value.trim(),
-        email: this.email.value.trim(),
-        message: this.message.value.trim()
-      };
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const submitBtn = form.querySelector('[type="submit"]');
+        submitBtn.disabled = true;
+        errorDisplay.textContent = '';
+        errorDisplay.style.display = 'none';
 
-      // 2. Validation
-      if (!formData.nom || !formData.email || !formData.message) {
-        throw new Error("Veuillez remplir tous les champs");
-      }
+        try {
+            const formData = new FormData(form);
+            const response = await fetch('', { // Envoi à la même page
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
 
-      // 3. Configuration du webhook (À PERSONNALISER)
-      const webhookPayload = {
-        username: "Nouveau message depuis le portfolio !!!!!!!!!!!!!!!!!!!!!!!!!!!",  // Nom du bot
-        avatar_url: "https://www.istockphoto.com/fr/vectoriel/point-dexclamation-signer-en-triangle-rouge-ic%C3%B4ne-de-vecteur-gm894875516-247346339",  // URL de l'avatar
-        embeds: [{
-          title: "📩 Nouveau Message",
-          color: 0x5865F2,  // Couleur bleue Discord
-          fields: [
-            { name: "**Nom**", value: formData.nom, inline: true },
-            { name: "**Email**", value: formData.email, inline: true },
-            { name: "**Message**", value: formData.message }
-          ],
-          footer: { 
-            text: "Formulaire de contact • " + new Date().toLocaleDateString(),
-            icon_url: "https://example.com/icon.png"
-          },
-          thumbnail: { 
-            url: "https://example.com/thumbnail.png" 
-          }
-        }]
-      };
+            const result = await response.json();
+            
+            if (!result.success) {
+                throw new Error(result.message || 'Erreur lors de l\'envoi');
+            }
 
-      // 4. Envoi à Discord
-      const response = await fetch('https://discord.com/api/webhooks/1381736257507299430/jmxVnbOahyGjZ10zM2f8f8HAniq5CdDPmMrWfXwz4H4cccm3m18jZqZTUGQeFXigVF4l', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(webhookPayload)
-      });
+            // Feedback visuel
+           submitBtn.textContent = '✓ Envoyé';
+            submitBtn.classList.add('submit_success');
+            submitBtn.style.backgroundColor = '#4CAF50'; // Vert
+            
+            // Réinitialisation après 2 secondes
+            setTimeout(() => {
+                form.reset();
+                submitBtn.textContent = 'Envoyer';
+                submitBtn.classList.remove('submit_success');
+                submitBtn.style.backgroundColor = '';
+            }, 2000);
 
-      if (!response.ok) throw new Error("Erreur lors de l'envoi à Discord");
 
-      // 5. Feedback utilisateur
-      alert("Message envoyé avec succès !");
-      this.reset();
-
-    } catch (error) {
-      console.error("Erreur:", error);
-      alert(error.message);
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Envoyer';
-    }
-  });
+        } catch (error) {
+            errorDisplay.textContent = error.message;
+            errorDisplay.style.display = 'block';
+            console.error('Erreur:', error);
+        } finally {
+            submitBtn.disabled = false;
+        }
+    });
 });
+
 // ------------------------ Animation initial
 document.addEventListener('DOMContentLoaded', () => {
     const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });

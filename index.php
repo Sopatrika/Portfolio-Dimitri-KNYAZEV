@@ -1,3 +1,88 @@
+<?php
+// Traitement du formulaire
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    header('Content-Type: application/json');
+    
+    // 1. Validation des entrées
+    $requiredFields = ['nom', 'email', 'message'];
+    foreach ($requiredFields as $field) {
+        if (empty($_POST[$field])) {
+            http_response_code(400);
+            exit(json_encode(['success' => false, 'message' => 'Tous les champs sont requis']));
+        }
+    }
+
+    // 2. Nettoyage des données
+    $data = [
+        'nom' => htmlspecialchars($_POST['nom'], ENT_QUOTES, 'UTF-8'),
+        'email' => filter_var($_POST['email'], FILTER_SANITIZE_EMAIL),
+        'message' => htmlspecialchars($_POST['message'], ENT_QUOTES, 'UTF-8')
+    ];
+
+    if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400);
+        exit(json_encode(['success' => false, 'message' => 'Email invalide']));
+    }
+
+    // 3. Envoi à Discord
+    $webhookUrl = 'https://discord.com/api/webhooks/1387918061364838572/ITeExIgCkn36-AV2tzJz9kK-UYIKqAINO7cGVN5-chmjOxuvrbzgea9JXU-6Sa9jZDa8'; // REMPLACER
+    
+    $payload = [
+        'username' => 'Nouveau message !!!!!!',
+        'embeds' => [[
+            'title' => '📨 Contact',
+            'color' => 0x3498db,
+            'fields' => [
+                ['name' => 'Nom', 'value' => $data['nom'], 'inline' => true],
+                ['name' => 'Email', 'value' => $data['email'], 'inline' => true],
+                ['name' => 'Message', 'value' => substr($data['message'], 0, 1000)]
+            ],
+            'footer' => [
+                'text' => 'Envoyé le ' . date('d/m/Y à H:i')
+            ],
+            'timestamp' => date('c')
+        ]]
+    ];
+
+    $options = [
+        'http' => [
+            'header' => "Content-type: application/json\r\n",
+            'method' => 'POST',
+            'content' => json_encode($payload),
+            'timeout' => 10
+        ]
+    ];
+
+    $context = stream_context_create($options);
+    $result = @file_get_contents($webhookUrl, false, $context);
+
+    if ($result === false) {
+        $error = error_get_last();
+        http_response_code(500);
+        exit(json_encode([
+            'success' => false,
+            'message' => 'Erreur lors de la communication avec Discord',
+            'debug' => $error['message'] ?? 'Erreur inconnue'
+        ]));
+    }
+
+    exit(json_encode(['success' => true, 'message' => 'Message envoyé avec succès']));
+}
+?>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mon Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Votre contenu HTML ici -->
+    <script src="script.js"></script>
+</body>
+</html>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
