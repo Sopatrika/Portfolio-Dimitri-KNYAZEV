@@ -1,5 +1,5 @@
 
-// ------------------------ Formulaire
+// ------------------------ Formulaire --------------------------------------
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('.formulaire form');
     if (!form) return;
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// ------------------------ Animation initial
+// ------------------------ Animation initial --------------------------------------
 document.addEventListener('DOMContentLoaded', () => {
     const tl = gsap.timeline({ defaults: { ease: "power3.inOut" } });
     
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         animate(); // Lance l'animation
 
-//opacité du header selon le scroll
+// -------------------------------------- Opacité du header selon le scroll --------------------------------------
 const header = document.querySelector('header') //variable header
 const delay_scroll = 100;
 window.addEventListener('scroll', () => { //déclenche une fonction lorsqu'on scroll
@@ -156,7 +156,7 @@ window.addEventListener('scroll', () => { //déclenche une fonction lorsqu'on sc
     }
 })
 
-// -------------------------------------- Animaton d'apparition au scroll des sections
+// -------------------------------------- Animaton d'apparition au scroll des sections --------------------------------------
 const sections = document.querySelectorAll('.presentation_section, .competence_section, .projets_section, .cv_section, .contact_section');
 window.addEventListener('scroll', () => {
     const triggerBottom = window.innerHeight * 0.8; // Déclenchement quand 80% de l'élément est visible
@@ -173,7 +173,7 @@ window.addEventListener('scroll', () => {
 // Déclenche une première vérification au chargement
 window.dispatchEvent(new Event('scroll'));
 
-// -------------------------------------- header en responsive
+// -------------------------------------- header en responsive --------------------------------------
 const navButton = document.querySelector(".responsive_button_header");
 const darkScreen = document.querySelector(".responsive_ecran_sombre");
 const menu = document.querySelector(".reponsive_nav_header_menu");
@@ -193,25 +193,3 @@ darkScreen.addEventListener("click", function() {
     darkScreen.classList.remove("responsive_ecran_sombre_open");
     navButton.classList.remove("menu-open");
 });
-
-
-// Sélectionne tous les projets
-const projets = document.querySelectorAll('.bloc_projet');
-
-// Vérifie si c'est un mobile/tablette
-function estMobile() {
-  return window.innerWidth <= 1024; // Breakpoint tablette
-}
-
-// Ajoute ou retire la classe 'visible'
-function toggleDescription(projet) {
-  const desc = projet.querySelector('.projet_desc');
-  if (desc) desc.classList.toggle('visible');
-}
-
-// Setup initial
-if (estMobile()) {
-  projets.forEach(projet => {
-    projet.addEventListener('click', () => toggleDescription(projet));
-  });
-}

@@ -3,7 +3,59 @@
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
     
-    // 1. Validation des entrées
+    // Configuration des domaines autorisés
+    $ALLOWED_DOMAINS = ['dimitriknyazev.fr', 'www.dimitriknyazev.fr', 'localhost'];
+    $ALLOWED_IPS = ['127.0.0.1']; // Vous pouvez ajouter des IPs spécifiques si nécessaire
+
+    // Fonction pour obtenir l'origine de la requête
+    function get_request_origin() {
+        $origin = '';
+        
+        // Vérifier le header Origin (utilisé par les requêtes AJAX/fetch)
+        if (!empty($_SERVER['HTTP_ORIGIN'])) {
+            $origin = parse_url($_SERVER['HTTP_ORIGIN'], PHP_URL_HOST);
+        }
+        // Vérifier le header Referer (pour les formulaires standard)
+        elseif (!empty($_SERVER['HTTP_REFERER'])) {
+            $origin = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
+        }
+        // Vérifier l'adresse IP source (dernier recours)
+        else {
+            $origin = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        }
+        
+        return $origin;
+    }
+
+    // Fonction pour valider l'origine
+    function is_valid_origin($origin, $allowed_domains, $allowed_ips) {
+        // Vérifier si c'est une IP autorisée
+        if (in_array($origin, $allowed_ips)) {
+            return true;
+        }
+        
+        // Vérifier si c'est un domaine autorisé
+        foreach ($allowed_domains as $domain) {
+            // Vérification plus précise avec fin de chaîne
+            if ($origin === $domain || substr($origin, -strlen($domain)) === $domain) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    // VÉRIFICATION DE L'ORIGINE (doit être placée avant tout traitement)
+    $origin = get_request_origin();
+    if (!is_valid_origin($origin, $ALLOWED_DOMAINS, $ALLOWED_IPS)) {
+        http_response_code(403);
+        exit(json_encode([
+            'success' => false, 
+            'message' => 'Accès non autorisé. Origine: ' . $origin
+        ]));
+    }
+
+    // 1. Validation des entrées (seulement après la vérification d'origine)
     $requiredFields = ['nom', 'email', 'message'];
     foreach ($requiredFields as $field) {
         if (empty($_POST[$field])) {
@@ -24,8 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit(json_encode(['success' => false, 'message' => 'Email invalide']));
     }
 
-    // 3. Envoi à Discord
-    $webhookUrl = 'https://discord.com/api/webhooks/1387918061364838572/ITeExIgCkn36-AV2tzJz9kK-UYIKqAINO7cGVN5-chmjOxuvrbzgea9JXU-6Sa9jZDa8'; // REMPLACER
+    // 3. Envoi au destinataire sur Discord
+    $webhookUrl = 'https://discord.com/api/webhooks/1407383772294549544/N6eq2e-xMHCYAhBjReku0P6AAk-0mM518pwYQOSSTeXJZmXoYciFuC0b0UlxeQHOxavy';
     
     $payload = [
         'username' => 'Nouveau message !!!!!!',
@@ -35,7 +87,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'fields' => [
                 ['name' => 'Nom', 'value' => $data['nom'], 'inline' => true],
                 ['name' => 'Email', 'value' => $data['email'], 'inline' => true],
-                ['name' => 'Message', 'value' => substr($data['message'], 0, 1000)]
+                ['name' => 'Message', 'value' => substr($data['message'], 0, 1000)],
+                ['name' => 'Origine', 'value' => $origin] // Ajout de l'origine dans le message
             ],
             'footer' => [
                 'text' => 'Envoyé le ' . date('d/m/Y à H:i')
@@ -61,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         http_response_code(500);
         exit(json_encode([
             'success' => false,
-            'message' => 'Erreur lors de la communication avec Discord',
+            'message' => "Erreur lors de l'envoi du message",
             'debug' => $error['message'] ?? 'Erreur inconnue'
         ]));
     }
@@ -74,25 +127,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Mon Portfolio</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <!-- Votre contenu HTML ici -->
-    <script src="script.js"></script>
-</body>
-</html>
-
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dimitri KNYAZEV</title>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&family=Sora:wght@100..800&display=swap" rel="stylesheet">
+    <link rel="icon" href="img/favicon_dimitri_knyazev.png" type="image/png">
 </head>
 
 <body>
@@ -122,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </header>
     <div class="intro-overlay">
-        <div class="intro_titre">Bienvenue sur mon Portfolio</div>
+        <div class="intro_titre">Dimitri Knyazev</div>
         <div class="loading-bar"></div>
     </div>
     <main>
@@ -252,16 +293,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <b>Graphisme</b>
     </div>
     <div class="bloc_competence">
-        <div class="element_competences"><div>Figma</div><svg class="icones_competences" fill="#ffffff" width="40px" height="40px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>figma</title> <path d="M20.692 12.227c-2.084 0-3.773 1.689-3.773 3.773s1.689 3.773 3.773 3.773v0h0.122c2.084 0 3.773-1.689 3.773-3.773s-1.689-3.773-3.773-3.773v0zM20.814 21.611h-0.122c-3.099 0-5.611-2.512-5.611-5.611s2.512-5.611 5.611-5.611v0h0.122c3.099 0 5.611 2.512 5.611 5.611s-2.512 5.611-5.611 5.611v0zM11.186 21.611c-0 0-0.001 0-0.001 0-2.084 0-3.773 1.689-3.773 3.773s1.689 3.773 3.773 3.773c0.011 0 0.023-0 0.034-0h-0.002c0.003 0 0.007 0 0.011 0 2.121 0 3.843-1.714 3.854-3.833v-3.713zM11.216 30.996c-0.013 0-0.029 0-0.045 0-3.099 0-5.611-2.512-5.611-5.611s2.512-5.611 5.611-5.611c0.005 0 0.010 0 0.015 0h5.733v5.55c-0.012 3.135-2.557 5.672-5.693 5.672-0.003 0-0.006 0-0.009 0h0zM11.186 12.227c-2.084 0-3.773 1.689-3.773 3.773s1.689 3.773 3.773 3.773v0h3.895v-7.545zM16.918 21.611h-5.732c-3.099 0-5.611-2.512-5.611-5.611s2.512-5.611 5.611-5.611v0h5.733v11.222zM11.186 2.843c-2.084 0-3.773 1.689-3.773 3.773s1.689 3.773 3.773 3.773v0h3.895v-7.547zM16.918 12.227h-5.732c-3.099 0-5.612-2.512-5.612-5.612s2.512-5.612 5.612-5.612v0h5.733v11.223zM16.918 10.389h3.895c2.080-0.005 3.764-1.692 3.764-3.773s-1.684-3.768-3.764-3.773h-3.895zM20.814 12.227h-5.733v-11.223h5.733c3.099 0 5.612 2.512 5.612 5.612s-2.512 5.612-5.612 5.612v0z"></path> </g></svg></div>
-        <div class="element_competences"><div>Photoshop</div><svg class="icones_competences" fill="#ffffff" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40px" height="40px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="2069a460dcf28295e231f3111e037552"> <path display="inline" d="M426.333,0.5H85.667C38.825,0.5,0.5,38.825,0.5,85.667v340.667c0,46.842,38.325,85.167,85.167,85.167 h340.667c46.842,0,85.167-38.325,85.167-85.167V85.667C511.5,38.825,473.175,0.5,426.333,0.5z M245.329,260.524 c-17.736,17.736-45.611,26.065-77.103,26.065c-8.326,0-15.927-0.365-21.72-1.451v91.945h-44.159V136.363 c15.927-2.895,38.009-5.069,68.05-5.069c32.582,0,56.473,6.878,72.039,19.911c14.48,11.947,23.89,31.131,23.89,53.936 C266.325,228.309,259.086,247.492,245.329,260.524z M337.981,380.706c-21.358,0-40.542-5.069-53.574-12.31l8.687-32.216 c10.135,6.154,29.322,12.671,45.249,12.671c19.545,0,28.236-7.964,28.236-19.549c0-11.943-7.239-18.099-28.96-25.7 c-34.391-11.947-48.866-30.769-48.505-51.403c0-31.131,25.7-55.383,66.604-55.383c19.549,0,36.562,5.069,46.695,10.496 l-8.687,31.493c-7.602-4.342-21.721-10.135-37.285-10.135c-15.928,0-24.615,7.602-24.615,18.46c0,11.224,8.326,16.655,30.77,24.618 c31.854,11.582,46.696,27.871,47.058,53.937C409.653,357.539,384.678,380.706,337.981,380.706z M221.8,206.95 c0,28.598-20.273,44.887-53.574,44.887c-9.049,0-16.289-0.362-21.72-1.809v-82.534c4.708-1.085,13.395-2.171,25.704-2.171 C202.979,165.323,221.8,179.803,221.8,206.95z"> </path> </g> </g></svg></div>
-        <div class="element_competences"><div>Illustrator</div><svg class="icones_competences" fill="#ffffff" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40px" height="40px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="2069a460dcf28295e231f3111e03585e"> <path display="inline" d="M227.593,217.991l19.188,60.091h-62.627l18.825-60.091c4.346-14.48,7.964-31.493,11.582-45.611h0.724 C218.906,186.499,222.886,203.149,227.593,217.991z M511.5,85.667v340.667c0,46.842-38.325,85.167-85.167,85.167H85.667 C38.825,511.5,0.5,473.175,0.5,426.333V85.667C0.5,38.825,38.825,0.5,85.667,0.5h340.667C473.175,0.5,511.5,38.825,511.5,85.667z M324.246,380.885l-79.279-243.977h-56.83l-78.189,243.977h45.973l20.997-69.14h77.465l22.082,69.14H324.246z M399.52,204.597 h-44.888v176.288h44.888V204.597z M402.052,155.368c-0.362-13.756-9.772-24.252-24.977-24.252 c-14.842,0-24.976,10.496-24.976,24.252c0,13.395,9.772,23.891,24.614,23.891C392.279,179.258,402.052,168.762,402.052,155.368z"> </path> </g> </g></svg></div>
+        <div class="element_competences"><svg class="icones_competences" fill="#ffffff" width="40px" height="40px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>figma</title> <path d="M20.692 12.227c-2.084 0-3.773 1.689-3.773 3.773s1.689 3.773 3.773 3.773v0h0.122c2.084 0 3.773-1.689 3.773-3.773s-1.689-3.773-3.773-3.773v0zM20.814 21.611h-0.122c-3.099 0-5.611-2.512-5.611-5.611s2.512-5.611 5.611-5.611v0h0.122c3.099 0 5.611 2.512 5.611 5.611s-2.512 5.611-5.611 5.611v0zM11.186 21.611c-0 0-0.001 0-0.001 0-2.084 0-3.773 1.689-3.773 3.773s1.689 3.773 3.773 3.773c0.011 0 0.023-0 0.034-0h-0.002c0.003 0 0.007 0 0.011 0 2.121 0 3.843-1.714 3.854-3.833v-3.713zM11.216 30.996c-0.013 0-0.029 0-0.045 0-3.099 0-5.611-2.512-5.611-5.611s2.512-5.611 5.611-5.611c0.005 0 0.010 0 0.015 0h5.733v5.55c-0.012 3.135-2.557 5.672-5.693 5.672-0.003 0-0.006 0-0.009 0h0zM11.186 12.227c-2.084 0-3.773 1.689-3.773 3.773s1.689 3.773 3.773 3.773v0h3.895v-7.545zM16.918 21.611h-5.732c-3.099 0-5.611-2.512-5.611-5.611s2.512-5.611 5.611-5.611v0h5.733v11.222zM11.186 2.843c-2.084 0-3.773 1.689-3.773 3.773s1.689 3.773 3.773 3.773v0h3.895v-7.547zM16.918 12.227h-5.732c-3.099 0-5.612-2.512-5.612-5.612s2.512-5.612 5.612-5.612v0h5.733v11.223zM16.918 10.389h3.895c2.080-0.005 3.764-1.692 3.764-3.773s-1.684-3.768-3.764-3.773h-3.895zM20.814 12.227h-5.733v-11.223h5.733c3.099 0 5.612 2.512 5.612 5.612s-2.512 5.612-5.612 5.612v0z"></path> </g></svg><div>Figma</div></div>
+        <div class="element_competences"><svg class="icones_competences" fill="#ffffff" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40px" height="40px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="2069a460dcf28295e231f3111e037552"> <path display="inline" d="M426.333,0.5H85.667C38.825,0.5,0.5,38.825,0.5,85.667v340.667c0,46.842,38.325,85.167,85.167,85.167 h340.667c46.842,0,85.167-38.325,85.167-85.167V85.667C511.5,38.825,473.175,0.5,426.333,0.5z M245.329,260.524 c-17.736,17.736-45.611,26.065-77.103,26.065c-8.326,0-15.927-0.365-21.72-1.451v91.945h-44.159V136.363 c15.927-2.895,38.009-5.069,68.05-5.069c32.582,0,56.473,6.878,72.039,19.911c14.48,11.947,23.89,31.131,23.89,53.936 C266.325,228.309,259.086,247.492,245.329,260.524z M337.981,380.706c-21.358,0-40.542-5.069-53.574-12.31l8.687-32.216 c10.135,6.154,29.322,12.671,45.249,12.671c19.545,0,28.236-7.964,28.236-19.549c0-11.943-7.239-18.099-28.96-25.7 c-34.391-11.947-48.866-30.769-48.505-51.403c0-31.131,25.7-55.383,66.604-55.383c19.549,0,36.562,5.069,46.695,10.496 l-8.687,31.493c-7.602-4.342-21.721-10.135-37.285-10.135c-15.928,0-24.615,7.602-24.615,18.46c0,11.224,8.326,16.655,30.77,24.618 c31.854,11.582,46.696,27.871,47.058,53.937C409.653,357.539,384.678,380.706,337.981,380.706z M221.8,206.95 c0,28.598-20.273,44.887-53.574,44.887c-9.049,0-16.289-0.362-21.72-1.809v-82.534c4.708-1.085,13.395-2.171,25.704-2.171 C202.979,165.323,221.8,179.803,221.8,206.95z"> </path> </g> </g></svg><div>Photoshop</div></div>
+        <div class="element_competences"><svg class="icones_competences" fill="#ffffff" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40px" height="40px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="2069a460dcf28295e231f3111e03585e"> <path display="inline" d="M227.593,217.991l19.188,60.091h-62.627l18.825-60.091c4.346-14.48,7.964-31.493,11.582-45.611h0.724 C218.906,186.499,222.886,203.149,227.593,217.991z M511.5,85.667v340.667c0,46.842-38.325,85.167-85.167,85.167H85.667 C38.825,511.5,0.5,473.175,0.5,426.333V85.667C0.5,38.825,38.825,0.5,85.667,0.5h340.667C473.175,0.5,511.5,38.825,511.5,85.667z M324.246,380.885l-79.279-243.977h-56.83l-78.189,243.977h45.973l20.997-69.14h77.465l22.082,69.14H324.246z M399.52,204.597 h-44.888v176.288h44.888V204.597z M402.052,155.368c-0.362-13.756-9.772-24.252-24.977-24.252 c-14.842,0-24.976,10.496-24.976,24.252c0,13.395,9.772,23.891,24.614,23.891C392.279,179.258,402.052,168.762,402.052,155.368z"> </path> </g> </g></svg><div>Illustrator</div></div>
     </div>
     <!-- Troisième paire -->
     <div class="desc_competence">
         <b>Autre compétences</b>
     </div>
     <div class="bloc_competence">
-        <div class="element_competences"><div>Premiere Pro</div><svg class="icones_competences" fill="#ffffff" width="40px" height="40px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>adobepremierepro</title> <path d="M25.347 12.001v2.437c0 0.1-0.062 0.137-0.2 0.137-0.059-0.002-0.128-0.004-0.197-0.004-0.797 0-1.554 0.172-2.236 0.48l0.034-0.014c-0.25 0.114-0.462 0.27-0.636 0.461l-0.001 0.002v6.373c0 0.125-0.050 0.175-0.162 0.175h-2.462c-0.008 0.001-0.017 0.002-0.026 0.002-0.089 0-0.162-0.066-0.173-0.151l-0-0.001v-6.973l-0.012-0.937-0.025-0.975c0-0.287-0.025-0.562-0.050-0.85-0.001-0.005-0.001-0.012-0.001-0.018 0-0.056 0.037-0.104 0.088-0.119l0.001-0h2.224c0 0 0 0 0.001 0 0.121 0 0.223 0.085 0.249 0.198l0 0.002c0.103 0.329 0.163 0.707 0.163 1.098 0 0.018-0 0.036-0 0.054l0-0.003c0.376-0.432 0.823-0.792 1.325-1.062l0.025-0.012c0.542-0.307 1.191-0.487 1.881-0.487 0.006 0 0.013 0 0.019 0h-0.001c0.006-0.001 0.013-0.001 0.020-0.001 0.080 0 0.146 0.060 0.155 0.138l0 0.001zM16.825 15.938c-0.5 0.69-1.185 1.218-1.982 1.515l-0.030 0.010c-0.775 0.271-1.668 0.428-2.597 0.428-0.075 0-0.151-0.001-0.226-0.003l0.011 0-0.625-0.012-0.537-0.012v4.011c0.001 0.008 0.002 0.016 0.002 0.025 0 0.079-0.061 0.144-0.139 0.15l-0 0h-2.424c-0.1 0-0.15-0.050-0.15-0.162v-12.859c0-0.087 0.037-0.137 0.125-0.137l0.7-0.012 0.95-0.025 1.087-0.025 1.137-0.012c0.063-0.002 0.137-0.003 0.211-0.003 0.846 0 1.658 0.143 2.415 0.406l-0.052-0.016c0.654 0.226 1.213 0.576 1.676 1.026l-0.001-0.001c0.392 0.393 0.702 0.868 0.903 1.397l0.009 0.027c0.181 0.483 0.286 1.041 0.287 1.624v0c0.002 0.053 0.004 0.116 0.004 0.179 0 0.926-0.281 1.785-0.763 2.499l0.010-0.016zM25.685 1.379h-19.369c-2.933 0-5.311 2.378-5.311 5.311v0 18.62c0 0.001 0 0.003 0 0.004 0 2.931 2.376 5.307 5.307 5.307 0.002 0 0.003 0 0.005 0h19.369c0.001 0 0.003 0 0.004 0 2.931 0 5.307-2.376 5.307-5.307 0-0.002 0-0.003 0-0.005v0-18.62c0-0.001 0-0.003 0-0.004 0-2.931-2.376-5.307-5.307-5.307-0.002 0-0.003 0-0.005 0h0zM13.688 11.526c-0.396-0.16-0.855-0.253-1.336-0.253-0.049 0-0.097 0.001-0.145 0.003l0.007-0q-0.681-0.014-1.362 0.025v4.199l0.487 0.025h0.662c0.002 0 0.004 0 0.005 0 0.512 0 1.004-0.082 1.465-0.234l-0.033 0.009c0.411-0.123 0.759-0.354 1.022-0.66l0.002-0.003c0.244-0.32 0.391-0.725 0.391-1.165 0-0.043-0.001-0.085-0.004-0.128l0 0.006c0.003-0.039 0.005-0.085 0.005-0.131 0-0.769-0.479-1.426-1.155-1.689l-0.012-0.004z"></path> </g></svg></div>
+        <div class="element_competences"><svg class="icones_competences" fill="#ffffff" width="40px" height="40px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>adobepremierepro</title> <path d="M25.347 12.001v2.437c0 0.1-0.062 0.137-0.2 0.137-0.059-0.002-0.128-0.004-0.197-0.004-0.797 0-1.554 0.172-2.236 0.48l0.034-0.014c-0.25 0.114-0.462 0.27-0.636 0.461l-0.001 0.002v6.373c0 0.125-0.050 0.175-0.162 0.175h-2.462c-0.008 0.001-0.017 0.002-0.026 0.002-0.089 0-0.162-0.066-0.173-0.151l-0-0.001v-6.973l-0.012-0.937-0.025-0.975c0-0.287-0.025-0.562-0.050-0.85-0.001-0.005-0.001-0.012-0.001-0.018 0-0.056 0.037-0.104 0.088-0.119l0.001-0h2.224c0 0 0 0 0.001 0 0.121 0 0.223 0.085 0.249 0.198l0 0.002c0.103 0.329 0.163 0.707 0.163 1.098 0 0.018-0 0.036-0 0.054l0-0.003c0.376-0.432 0.823-0.792 1.325-1.062l0.025-0.012c0.542-0.307 1.191-0.487 1.881-0.487 0.006 0 0.013 0 0.019 0h-0.001c0.006-0.001 0.013-0.001 0.020-0.001 0.080 0 0.146 0.060 0.155 0.138l0 0.001zM16.825 15.938c-0.5 0.69-1.185 1.218-1.982 1.515l-0.030 0.010c-0.775 0.271-1.668 0.428-2.597 0.428-0.075 0-0.151-0.001-0.226-0.003l0.011 0-0.625-0.012-0.537-0.012v4.011c0.001 0.008 0.002 0.016 0.002 0.025 0 0.079-0.061 0.144-0.139 0.15l-0 0h-2.424c-0.1 0-0.15-0.050-0.15-0.162v-12.859c0-0.087 0.037-0.137 0.125-0.137l0.7-0.012 0.95-0.025 1.087-0.025 1.137-0.012c0.063-0.002 0.137-0.003 0.211-0.003 0.846 0 1.658 0.143 2.415 0.406l-0.052-0.016c0.654 0.226 1.213 0.576 1.676 1.026l-0.001-0.001c0.392 0.393 0.702 0.868 0.903 1.397l0.009 0.027c0.181 0.483 0.286 1.041 0.287 1.624v0c0.002 0.053 0.004 0.116 0.004 0.179 0 0.926-0.281 1.785-0.763 2.499l0.010-0.016zM25.685 1.379h-19.369c-2.933 0-5.311 2.378-5.311 5.311v0 18.62c0 0.001 0 0.003 0 0.004 0 2.931 2.376 5.307 5.307 5.307 0.002 0 0.003 0 0.005 0h19.369c0.001 0 0.003 0 0.004 0 2.931 0 5.307-2.376 5.307-5.307 0-0.002 0-0.003 0-0.005v0-18.62c0-0.001 0-0.003 0-0.004 0-2.931-2.376-5.307-5.307-5.307-0.002 0-0.003 0-0.005 0h0zM13.688 11.526c-0.396-0.16-0.855-0.253-1.336-0.253-0.049 0-0.097 0.001-0.145 0.003l0.007-0q-0.681-0.014-1.362 0.025v4.199l0.487 0.025h0.662c0.002 0 0.004 0 0.005 0 0.512 0 1.004-0.082 1.465-0.234l-0.033 0.009c0.411-0.123 0.759-0.354 1.022-0.66l0.002-0.003c0.244-0.32 0.391-0.725 0.391-1.165 0-0.043-0.001-0.085-0.004-0.128l0 0.006c0.003-0.039 0.005-0.085 0.005-0.131 0-0.769-0.479-1.426-1.155-1.689l-0.012-0.004z"></path> </g></svg><div>Premiere Pro</div></div>
                     <div class="element_competences">Gestion de projet</div>
                     <div class="element_competences">Communication marketing</div>
     </div>
@@ -271,8 +312,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <div class="bloc_competence">
         <!-- Contenu du quatrième bloc -->
-         <div class="element_competences"><div>Anglais B2</div><img class="icones_competences" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg" alt=""></div>
-         <div class="element_competences"><div>Allemand A2</div><img class="icones_competences" src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg" alt=""></div>
+         <div class="element_competences"><img class="icones_competences" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg" alt="drapeau Royaume Unis"><div>Anglais B2</div></div>
+         <div class="element_competences"><img class="icones_competences" src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg" alt="drapeau allemand"><div>Allemand A2</div></div>
     </div>
     <div class="competence_barre"></div>
 </div>
