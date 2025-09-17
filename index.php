@@ -194,14 +194,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="section_interet_parcours_more">
                         <h2>Centres d'interêt</h2>
                         <div>
-                            <ul class="section_centre_interet_parcours_more">
+                        <ul class="section_centre_interet_parcours_more">
                                 <img class="icones" src="img/icons8-développement-web-50 (1).png" alt="">
                                 <li>Développement Web</li>
-                            </ul>
-                            <ul class="section_centre_interet_parcours_more">
+                        </ul>
+                        <ul class="section_centre_interet_parcours_more">
                                 <img class="icones" src="img/icons8-manette-50.png" alt="">
                                 <li>Jeux-vidéos</li>
-                            </ul>
+                        </ul>
                         <ul class="section_centre_interet_parcours_more">
                             <img class="icones" src="img/icons8-dessin-50.png" alt="">
                             <li>Dessin</li>
@@ -223,16 +223,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 <div class="section_interet_parcours_more">
                         <h2>Parcours</h2>
-                        <ul>
-                            <div class="section_centre_interet_parcours_more">
+                        <div>
+                            <ul class="section_centre_interet_parcours_more">
                                 <li><b>2022-2024 : </b></li>
                                 <p>Baccalauréat Technologique Sciences et Technologies de l'Industrie et du Développement Durable (STI2D) au lycée Louis Armand à Mulhouse.</p>
-                            </div>
-                            <div class="section_centre_interet_parcours_more">
+                            </ul>
+                            <ul class="section_centre_interet_parcours_more">
                                 <li><b>2024-2027 : </b></li>
                                 <p>BUT Métiers du Multimédia et de l'Internet - Parcours Développement Web à l'IUT de Mulhouse.</p>
-                            </div>
-                    </ul>
+                            </ul>
+                        </div>
                 </div>
                 </div>
             </div>
@@ -410,15 +410,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="formulaire">
                     <form>
                         <div class="element_formulaire">
-                            <label class="label_formulaire" for="">Nom et Prénom</label>
-                            <input class="input_formulaire" type="text" id="nom" name="nom" required>
+                            <label class="label_formulaire" for="">Nom et Prénom<span class="star">*</span>
+                                <input class="input_formulaire" type="text" id="nom" name="nom" required></label>
                         </div>
                         <div class="element_formulaire">
-                            <label class="label_formulaire" for="Email">Email</label>
-                            <input class="input_formulaire" type="text" id="email" name="email" required>
+                            <label class="label_formulaire" for="Email">Email <span class="star">*</span>
+                                <input class="input_formulaire" type="text" id="email" name="email" required></label>
                         </div>
                         <div class="element_formulaire">
-                            <label class="label_formulaire" for="message">Message</label>
+                            <label class="label_formulaire" for="message">Message<span class="star">*</span></label>
                             <textarea id="message" name="message" required placeholder="Ecrivez votre message..."></textarea>
                         </div>
                         <button type="submit" class="formulaire_submit">Envoyer</button>

@@ -588,7 +588,7 @@ h1 {
     font-weight: 500;
 }
 
-.label_formulaire::after {
+.star {
     content: "*";
     color: #e74c3c;
     margin-left: 5px;
