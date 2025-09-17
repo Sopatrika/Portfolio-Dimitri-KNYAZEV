@@ -128,6 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Portfolio de Dimitri Knyazev, étudiant en développement web">
     <title>Dimitri KNYAZEV</title>
     <link rel="stylesheet" href="styles/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -139,6 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <canvas id="particleCanvas"></canvas>
     <div class="responsive_ecran_sombre"></div>
+    <div class="custom_cursor"></div>
     <header>
         <nav class="header_nav">
             <a href="#presentation_section">Présentation</a>
@@ -191,32 +193,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="section_interet_parcours">
                     <div class="section_interet_parcours_more">
                         <h2>Centres d'interêt</h2>
-                        <ul>
-                            <div class="section_centre_interet_parcours_more">
+                        <div>
+                            <ul class="section_centre_interet_parcours_more">
                                 <img class="icones" src="img/icons8-développement-web-50 (1).png" alt="">
                                 <li>Développement Web</li>
-                            </div>
-                            <div class="section_centre_interet_parcours_more">
+                            </ul>
+                            <ul class="section_centre_interet_parcours_more">
                                 <img class="icones" src="img/icons8-manette-50.png" alt="">
                                 <li>Jeux-vidéos</li>
-                            </div>
-                        <div class="section_centre_interet_parcours_more">
+                            </ul>
+                        <ul class="section_centre_interet_parcours_more">
                             <img class="icones" src="img/icons8-dessin-50.png" alt="">
                             <li>Dessin</li>
-                        </div>
-                        <div class="section_centre_interet_parcours_more">
+                        </ul>
+                        <ul class="section_centre_interet_parcours_more">
                             <img class="icones" src="img/icons8-histoire-50.png" alt="">
                             <li>Histoire</li>
-                        </div>
-                        <div class="section_centre_interet_parcours_more">
+                        </ul>
+                        <ul class="section_centre_interet_parcours_more">
                             <img class="icones" src="img/icons8-manga-48.png" alt="">
                             <li>Manga</li>
-                        </div>
-                        <div class="section_centre_interet_parcours_more">
+                        </ul>
+                        <ul class="section_centre_interet_parcours_more">
                             <img class="icones" src="img/icons8-musculation-50.png" alt="">
                             <li>Musculation</li>
-                        </div>
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
                 
                 <div class="section_interet_parcours_more">
@@ -326,23 +328,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="projets_section_grid">
                 <div class="bloc_projet">
                     <img src="img/image_projet_1.png" alt="image du projet">
-                    <h3 class="titre_projet">Site des pays du monde</h3>
+                    <b class="titre_projet">Site des pays du monde</b>
                     <div class="projet_desc">
                         <p>Un projet d'études dans lequel j'ai développé un site portant sur la liste de tous les pays du monde avec l'affichage de leurs données associés (Drapeau, Capitale, Population, etc...) mais aussi de leur villes, langues officielles et organisations internationales, et ceci à partir d'une base de données. Un classement permet de les classer par des catégories (population, nom...) par ordre croissant ou décroissant. Un formulaire permet également d'intégrer un pays à la base de donnée</p><a href="https://github.com/Sopatrika/SAE-203.git" class="lien_projet" target="_blank">Lien vers le projet Github</a></div>
                     </div>
                     <div class="bloc_projet">
                         <img src="img/image_projet_2.png" alt="image du projet">
-                        <h3 class="titre_projet">Portfolio MMI</h3>
+                        <b class="titre_projet">Portfolio MMI</b>
                         <div class="projet_desc"><p>Mon tout premier projet en BUT MMI ! Un site portfolio dans qui doit afficher toute les SAE (projets) en première année de BUT MMI avec leur compétences, leurs description et les cours associés et ceci à partir d'une structure de données en Javascript. Dans la liste des SAE, lorsqu'on clique sur l'une des SAE, une page se charge avec toute les informations de celle ci.</p><a href="https://github.com/Sopatrika/Site-Portfolio-pour-un-Projet-en-1-re-ann-e.git" class="lien_projet" target="_blank">Lien vers le projet Github</a></div>
                     </div>
                     <div class="bloc_projet">
                         <img src="img/image_projet_3.png" alt="image du projet">
-                        <h3 class="titre_projet">Mon Portfolio</h3>
+                        <b class="titre_projet">Mon Portfolio</b>
                         <div class="projet_desc"><p>Le site ou vous etes actuellement. Développé en première année de BUT MMI, je présente mes réalisations, mes compétences et mon parcours ici.</p> <a href="" target="_blank" class="lien_projet">Lien vers le projet</a></div>
                     </div>
                     <div class="bloc_projet">
                         <img src="img/image_projet_4.png" alt="image du projet">
-                        <h3 class="titre_projet">Fiche Produit Red Dead Redemption 2</h3>
+                        <b class="titre_projet">Fiche Produit Red Dead Redemption 2</b>
                         <div class="projet_desc"><p>Un petit projet design d'une fiche produit pour le jeu Red Dead Redemption 2 que j'ai réalisé sur Figma durant mes études.</p><a href="https://www.figma.com/design/4nug42ptNs5mjZ2FjvvVM3/Fiche-Produit-Dimitri-KNYAZEV?node-id=0-1&t=vzLAR6YATkcZHi5M-1" target="_blank" class="lien_projet">Lien vers le projet</a></div>
                     </div>
             </div>
@@ -357,11 +359,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="deux_cv">
                     <div class="CV">
                     <a class="image_cv" href="img/CV_Numerique_developpeur_Web_Dimitri_KNYAZEV.pdf" target="_blank"><img src="img/CV Numérique.svg" alt=""><div class="hover_cv">Cliquez dessus</div></a>
-                    <h4>CV Numérique</h4>
+                    <b class="titre_CV">CV Numérique</b>
                 </div>
                 <div class="CV">
                     <a class="image_cv" href="img/CV_Imprimable_Developpeur_Web_Dimitri_KNYAZEV.pdf" target="_blank"><img src="img/CV Imprimable.svg" alt=""><div class="hover_cv">Cliquez dessus</div></a>
-                    <h4>CV Imprimable</h4>
+                    <b class="titre_CV">CV Imprimable</b>
                 </div>
                 </div>
             </div>
@@ -374,7 +376,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="contact_section_flex">
                 <div class="contact_left">
                     <p class="intro_section">Un projet en tête ou simplement envie d’échanger avec moi ? N’hésite pas à me contacter à partir de ce formulaire !</p>
-                    <ul class="liste_contact">
+                    <div class="liste_contact">
                         <div class="element_contact">
                             <img class="icones" src="img/icons8-téléphone-50.png" alt="">
                             <div>
@@ -403,7 +405,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div><a href="https://www.instagram.com/dimitri_knyazev/" target="_blank">dimitri_knyazev</a></div>
                             </div>
                         </div>
-                    </ul>
+                        </div>
                 </div>
                 <div class="formulaire">
                     <form>

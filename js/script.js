@@ -1,4 +1,3 @@
-
 // ------------------------ Formulaire --------------------------------------
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('.formulaire form');
@@ -72,7 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
     .to(".intro-overlay", {y: "-100%",duration: 0.5,ease: "power2.in",
         onComplete: () => {
             document.querySelector('.intro-overlay').style.display = 'none';
-            document.querySelector('body').style.overflow = 'auto';
+            document.body.style.overflow = 'auto';
+            document.body.style.cursor = "auto";
         }
     }, "-=0.3")
 });
@@ -143,6 +143,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         animate(); // Lance l'animation
+
+// Cursor custom suivant le curseur
+
+ document.addEventListener("mousemove", function(event) {
+    const pointer = document.querySelector(".custom_cursor");
+    let mouseX = event.clientX;
+    let mouseY = event.clientY;
+            
+    // Mise à jour directe sans setInterval
+    pointer.style.left = mouseX + "px";
+    pointer.style.top = mouseY + "px";
+});
 
 // -------------------------------------- Opacité du header selon le scroll --------------------------------------
 const header = document.querySelector('header') //variable header
